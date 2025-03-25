@@ -149,6 +149,9 @@ public class KMeansClusterer {
 	 */
 	public double getWCSS() {
 		// TODO - implement
+
+		//for k clusters, use getDistance to find the minimum sum-of-squares
+		//aka we need to find the measure for .how close the data points are to each centroid (use getDistance). so we must add those points and then add each cluster's sum
 	}
 
 	/**
@@ -157,6 +160,9 @@ public class KMeansClusterer {
 	 */
 	public boolean assignNewClusters() {
 		// TODO - implement
+
+		//for each data point, use getDistance to find closest centroid for each euclid, compare the closest centroid('s k)
+		//if at least one change, true
 	}
 	
 	/**
@@ -164,6 +170,8 @@ public class KMeansClusterer {
 	 */
 	public void computeNewCentroids() {
 		// TODO - implement
+
+		//for each data point in a cluster, add together and counter++ until all data points (or all data points in a cluster) reached, then divide each sum by counter
 	}
 
 	
@@ -174,6 +182,9 @@ public class KMeansClusterer {
 	 */
 	public void kMeansCluster() {
 		// TODO - implement
+
+		//randomly select k centroids in data set
+
 	}
 	
 	/**
