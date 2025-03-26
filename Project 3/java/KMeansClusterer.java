@@ -210,7 +210,7 @@ public class KMeansClusterer {
 
 				double distance = getDistance(data[i], centroids[j]);
 
-				if (distance <= minDistance) {
+				if (distance < minDistance) {
 					minDistance = distance;
 					closestCentroid = j;
 				}
@@ -280,10 +280,10 @@ public class KMeansClusterer {
 			centroids[c] = data[random.nextInt(data[0].length)]; //assign cluster in centroids to random data point
 
 		//loop iter times as determined by command line arguments
-		for (int i = 0; i < iter; i++) {
+		//for (int i = 0; i < iter; i++) {
 			assignNewClusters();
 			computeNewCentroids();
-		}
+		//}
 
 		//getWCSS();
 	}
