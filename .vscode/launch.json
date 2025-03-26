@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "KMeansClusterer",
+            "request": "launch",
+            "mainClass": "KMeansClusterer",
+            "projectName": "Clustering-CSC350_8a55c3b6",
+            "args": ["-k", 2, "-iter", 50, "-in", "Project 3/bullseye2.dat", "-out", "Project 3/bullseye2-out.dat"]
+        }
+    ]    
+}
