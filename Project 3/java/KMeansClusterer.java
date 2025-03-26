@@ -272,9 +272,18 @@ public class KMeansClusterer {
 	 * uniform samples uniformly across given data ranges.
 	 */
 	public void kMeansCluster() {
-		// TODO - implement
+		//randomly select k centroids in data set
 
-		// randomly select k centroids in data set
+		//loop iter times as determined by command line arguments
+		for (int i = 0; i > iter; i++) {
+			
+		}
+
+		getWCSS();
+
+		assignNewClusters();
+
+		computeNewCentroids();
 
 	}
 
