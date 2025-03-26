@@ -171,14 +171,25 @@ public class KMeansClusterer {
 	 * 
 	 * @return the minimum Within-Clusters Sum-of-Squares measure
 	 */
-	// public double getWCSS() {
-	// TODO - implement
+	public double getWCSS() {
+		// TODO - implement
+		//for k clusters, use getDistance to find the minimum sum-of-squares
+		//aka we need to find the measure for .how close the data points are to each centroid (use getDistance). so we must add those points and then add each cluster's sum
+			if (data == null || centroids == null || clusters == null) {
+				throw new IllegalStateException("Data, centroids, or cluster assignments are not initialized.");
+			}
+		
+			double wcss = 0.0;
+		
+			// Iterate over each data point
+			for (int i = 0; i < data.length; i++) {
+				int clusterIndex = clusters[i]; // Get assigned cluster index
+				double[] centroid = centroids[clusterIndex]; // Get corresponding centroid
+				wcss += Math.pow(getDistance(data[i], centroid), 2); // Sum squared distances
+			}
+			return wcss;
+		}
 
-	// for k clusters, use getDistance to find the minimum sum-of-squares
-	// aka we need to find the measure for .how close the data points are to each
-	// centroid (use getDistance). so we must add those points and then add each
-	// cluster's sum
-	// }
 
 	/**
 	 * Assign each data point to the nearest centroid and return whether or not any
@@ -234,11 +245,23 @@ public class KMeansClusterer {
 	 * Compute new centroids at the mean point of each cluster of points.
 	 */
 	public void computeNewCentroids() {
-		// TODO - implement
+		double clusterSums[][] = new double[this.centroids.length][this.centroids[0].length]; //sum of each datapoint's coordinate for all dimensions
+		int numPoints[] = new int[this.centroids.length]; //amount of datapoints in a cluster
 
-		// for each data point in a cluster, add together and counter++ until all data
-		// points (or all data points in a cluster) reached, then divide each sum by
-		// counter
+		//for each data point, add it to the cluster's sum and increase the amount of datapoints in that cluster
+		for(int dataPoint = 0; dataPoint < this.clusters.length; dataPoint ++){
+			numPoints[clusters[dataPoint]] ++; //increase total datapoints in that cluster
+			for(int coords = 0; coords < dim; coords++){
+				clusterSums[clusters[dataPoint]][coords] += data[dataPoint][coords]; //add coords to sums of each dimension in a cluster
+			}
+		}
+
+		//find the new centroids by finding the average (dividing the sum of points in that coordinate by the amount of datapoints in that cluster)
+		for( int cluster = 0; cluster < clusterSums.length; cluster ++){
+			for(int dimension = 0; dimension < dim; dimension ++){
+				centroids[cluster][dimension] = clusterSums[cluster][dimension] / numPoints[cluster]; //divide each cluster's coordinate sums by the amount of data points in each cluster
+			}
+		}
 	}
 
 	/**
@@ -359,4 +382,5 @@ public class KMeansClusterer {
 		km.kMeansCluster();
 		km.writeClusterData(outfile);
 	}
+
 }
