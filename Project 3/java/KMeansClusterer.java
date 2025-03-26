@@ -277,7 +277,7 @@ public class KMeansClusterer {
 
 		//randomly select k centroids in data set
 		for (int c = 0; c < k; c++)
-			centroids[c] = data[random.nextInt(data[0].length)]; //assign cluster in centroids to random data point
+			centroids[c] = data[random.nextInt(data.length)]; //assign cluster in centroids to random data point
 
 		//loop iter times as determined by command line arguments
 		//for (int i = 0; i < iter; i++) {
@@ -391,6 +391,7 @@ public class KMeansClusterer {
 		km.setData(km.readData(infile));
 		km.kMeansCluster();
 		km.writeClusterData(outfile);
+		System.out.println(km.getWCSS());
 	}
 
 }
