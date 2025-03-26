@@ -149,10 +149,23 @@ public class KMeansClusterer {
 	 */
 	public double getWCSS() {
 		// TODO - implement
-
 		//for k clusters, use getDistance to find the minimum sum-of-squares
 		//aka we need to find the measure for .how close the data points are to each centroid (use getDistance). so we must add those points and then add each cluster's sum
-	}
+			if (data == null || centroids == null || clusters == null) {
+				throw new IllegalStateException("Data, centroids, or cluster assignments are not initialized.");
+			}
+		
+			double wcss = 0.0;
+		
+			// Iterate over each data point
+			for (int i = 0; i < data.length; i++) {
+				int clusterIndex = clusters[i]; // Get assigned cluster index
+				double[] centroid = centroids[clusterIndex]; // Get corresponding centroid
+				wcss += Math.pow(getDistance(data[i], centroid), 2); // Sum squared distances
+			}
+			return wcss;
+		}
+
 
 	/**
 	 * Assign each data point to the nearest centroid and return whether or not any cluster assignments changed.
