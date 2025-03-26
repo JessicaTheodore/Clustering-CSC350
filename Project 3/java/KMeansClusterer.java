@@ -169,9 +169,23 @@ public class KMeansClusterer {
 	 * Compute new centroids at the mean point of each cluster of points.
 	 */
 	public void computeNewCentroids() {
-		// TODO - implement
+		double clusterSums[][] = new double[this.centroids.length][this.centroids[0].length]; //sum of each datapoint's coordinate for all dimensions
+		int numPoints[] = new int[this.centroids.length]; //amount of datapoints in a cluster
 
-		//for each data point in a cluster, add together and counter++ until all data points (or all data points in a cluster) reached, then divide each sum by counter
+		//for each data point, add it to the cluster's sum and increase the amount of datapoints in that cluster
+		for(int dataPoint = 0; dataPoint < this.clusters.length; dataPoint ++){
+			numPoints[clusters[dataPoint]] ++; //increase total datapoints in that cluster
+			for(int coords = 0; coords < dim; coords++){
+				clusterSums[clusters[dataPoint]][coords] += data[dataPoint][coords]; //add coords to sums of each dimension in a cluster
+			}
+		}
+
+		//find the new centroids by finding the average (dividing the sum of points in that coordinate by the amount of datapoints in that cluster)
+		for( int cluster = 0; cluster < clusterSums.length; cluster ++){
+			for(int dimension = 0; dimension < dim; dimension ++){
+				centroids[cluster][dimension] = clusterSums[cluster][dimension] / numPoints[cluster]; //divide each cluster's coordinate sums by the amount of data points in each cluster
+			}
+		}
 	}
 
 	
@@ -288,4 +302,5 @@ public class KMeansClusterer {
 		km.kMeansCluster();
 		km.writeClusterData(outfile);
 	}
+
 }
