@@ -197,7 +197,6 @@ public class KMeansClusterer {
 	 * @return whether or not any cluster assignments changed
 	 */
 	public boolean assignNewClusters() {
-
 		boolean changed = false;
 		int[] newClusters = new int[data.length];
 
@@ -211,23 +210,22 @@ public class KMeansClusterer {
 
 				double distance = getDistance(data[i], centroids[j]);
 
-				if (distance < minDistance) {
+				if (distance <= minDistance) {
 					minDistance = distance;
 					closestCentroid = j;
 				}
+				
+			}
+			
+			// Assign the closest centroid to the data point
+			newClusters[i] = closestCentroid;
 
-				// Assign the closest centroid to the data point
-				newClusters[i] = closestCentroid;
+			// Check if the cluster assignment has changed
+			if (clusters == null || clusters[i] != closestCentroid) {
 
-				// Check if the cluster assignment has changed
-				if (clusters == null || clusters[i] != closestCentroid) {
-
-					changed = true;
-
-				}
+				changed = true;
 
 			}
-
 		}
 
 		// Update the clusters array
@@ -266,25 +264,28 @@ public class KMeansClusterer {
 	/**
 	 * Perform k-means clustering with Forgy initialization and return the 0-based
 	 * cluster assignments for corresponding data points.
-	 * If iter &gt; 1, choose the clustering that minimizes the WCSS measure.
-	 * If kMin &lt; kMax, select the k maximizing the gap statistic using 100
+	 * If iter &gt; 1, choose the clustering that minimizes the WCSS measure. - TO DO
+	 * If kMin &lt; kMax, select the k maximizing the gap statistic using 100 - TO DO
 	 * uniform samples uniformly across given data ranges.
 	 */
 	public void kMeansCluster() {
-		//randomly select k centroids in data set
-		for (int c = 0; c < k; c++) {
+		//initialize clusters array
+		clusters = new int [data.length];
 
-			centroids[0][0] = 1;
-			random.nextInt(kMin, kMax);
-		}
+		//initialize centroids 2d array
+		centroids = new double [k][dim];
+
+		//randomly select k centroids in data set
+		for (int c = 0; c < k; c++)
+			centroids[c] = data[random.nextInt(data[0].length)]; //assign cluster in centroids to random data point
 
 		//loop iter times as determined by command line arguments
-		for (int i = 0; i > iter; i++) {
+		for (int i = 0; i < iter; i++) {
 			assignNewClusters();
 			computeNewCentroids();
 		}
 
-		getWCSS();
+		//getWCSS();
 	}
 
 	/**
