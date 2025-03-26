@@ -172,7 +172,6 @@ public class KMeansClusterer {
 	 * @return the minimum Within-Clusters Sum-of-Squares measure
 	 */
 	public double getWCSS() {
-		// TODO - implement
 		//for k clusters, use getDistance to find the minimum sum-of-squares
 		//aka we need to find the measure for .how close the data points are to each centroid (use getDistance). so we must add those points and then add each cluster's sum
 			if (data == null || centroids == null || clusters == null) {
@@ -273,18 +272,19 @@ public class KMeansClusterer {
 	 */
 	public void kMeansCluster() {
 		//randomly select k centroids in data set
+		for (int c = 0; c < k; c++) {
+
+			centroids[0][0] = 1;
+			random.nextInt(kMin, kMax);
+		}
 
 		//loop iter times as determined by command line arguments
 		for (int i = 0; i > iter; i++) {
-			
+			assignNewClusters();
+			computeNewCentroids();
 		}
 
 		getWCSS();
-
-		assignNewClusters();
-
-		computeNewCentroids();
-
 	}
 
 	/**
