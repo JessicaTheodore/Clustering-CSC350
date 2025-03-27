@@ -17,9 +17,10 @@ public class KMeansClusterer {
 	private int k, kMin, kMax; // the allowable range of the of clusters
 	private int iter; // the number of k-Means Clustering iterations per k
 	private double[][] data; // the data vectors for clustering
-	private double[][] centroids; // the cluster centroids
-	private int[] clusters; // assigned clusters for each data point
+	private double[][] centroids, bestCentroids; // the cluster centroids, holder for best arrangement
+	private int[] clusters, bestClusters; // assigned clusters for each data point, holder for best assigned clusters
 	private Random random = new Random();
+	private double bestWCSS; // best WCSS found
 
 	/**
 	 * Read the specified data input format from the given file and return a
@@ -275,17 +276,28 @@ public class KMeansClusterer {
 		//initialize centroids 2d array
 		centroids = new double [k][dim];
 
+		//initialize best WCSS helper variables
+		bestWCSS = -1;
+		bestCentroids = new double [k][dim];
+		bestClusters = new int [data.length];
+
 		//randomly select k centroids in data set
 		for (int c = 0; c < k; c++)
 			centroids[c] = data[random.nextInt(data.length)]; //assign cluster in centroids to random data point
 
 		//loop iter times as determined by command line arguments
-		//for (int i = 0; i < iter; i++) {
+		for (int i = 0; i < iter; i++) {
 			assignNewClusters();
 			computeNewCentroids();
-		//}
 
-		//getWCSS();
+			//check if current getWCSS is best seen so far
+			if (getWCSS() > bestWCSS) {
+				//(re)assign relevant storage variables
+				bestWCSS = getWCSS();
+				bestCentroids = centroids;
+				bestClusters = clusters;
+			}
+		}
 	}
 
 	/**
@@ -300,14 +312,14 @@ public class KMeansClusterer {
 			out.write(String.format("%% %d dimensions\n", dim));
 			out.write(String.format("%% %d points\n", data.length));
 			out.write(String.format("%% %d clusters/centroids\n", k));
-			// out.write(String.format("%% %f within-cluster sum of squares\n", getWCSS()));
+			out.write(String.format("%% %f within-cluster sum of squares\n", getWCSS()));
 			for (int i = 0; i < k; i++) {
 				out.write(i + " ");
 				for (int j = 0; j < dim; j++)
-					out.write(centroids[i][j] + (j < dim - 1 ? " " : "\n"));
+					out.write(bestCentroids[i][j] + (j < dim - 1 ? " " : "\n"));
 			}
 			for (int i = 0; i < data.length; i++) {
-				out.write(clusters[i] + " ");
+				out.write(bestClusters[i] + " ");
 				for (int j = 0; j < dim; j++)
 					out.write(data[i][j] + (j < dim - 1 ? " " : "\n"));
 			}
@@ -391,7 +403,6 @@ public class KMeansClusterer {
 		km.setData(km.readData(infile));
 		km.kMeansCluster();
 		km.writeClusterData(outfile);
-		System.out.println(km.getWCSS());
 	}
 
 }
