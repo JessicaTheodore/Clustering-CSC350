@@ -403,6 +403,8 @@ public class KMeansClusterer {
 		km.setData(km.readData(infile));
 		km.kMeansCluster();
 		km.writeClusterData(outfile);
+
+		System.out.println("BEST WCSS: " + km.bestWCSS);
 	}
 
 }
