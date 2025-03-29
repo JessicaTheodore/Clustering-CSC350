@@ -204,7 +204,7 @@ public class KMeansClusterer {
 		for (int i = 0; i < data.length; i++) {
 
 			double minDistance = Double.MAX_VALUE;
-			int closestCentroid = -1;
+			int closestCentroid = 0;
 
 			// Find the closest centroid for the current data point
 			for (int j = 0; j < centroids.length; j++) {
@@ -265,7 +265,7 @@ public class KMeansClusterer {
 	/**
 	 * Perform k-means clustering with Forgy initialization and return the 0-based
 	 * cluster assignments for corresponding data points.
-	 * If iter &gt; 1, choose the clustering that minimizes the WCSS measure. - TO DO
+	 * If iter &gt; 1, choose the clustering that minimizes the WCSS measure.
 	 * If kMin &lt; kMax, select the k maximizing the gap statistic using 100 - TO DO
 	 * uniform samples uniformly across given data ranges.
 	 */
@@ -277,7 +277,7 @@ public class KMeansClusterer {
 		centroids = new double [k][dim];
 
 		//initialize best WCSS helper variables
-		bestWCSS = -1;
+		bestWCSS = Integer.MAX_VALUE;
 		bestCentroids = new double [k][dim];
 		bestClusters = new int [data.length];
 
@@ -286,18 +286,18 @@ public class KMeansClusterer {
 			centroids[c] = data[random.nextInt(data.length)]; //assign cluster in centroids to random data point
 
 		//loop iter times as determined by command line arguments
-		for (int i = 0; i < iter; i++) {
+		// for (int i = 0; i < iter; i++) {
 			assignNewClusters();
 			computeNewCentroids();
 
-			//check if current getWCSS is best seen so far
-			if (getWCSS() > bestWCSS) {
-				//(re)assign relevant storage variables
-				bestWCSS = getWCSS();
-				bestCentroids = centroids;
-				bestClusters = clusters;
-			}
-		}
+			//check if current getWCSS is best (lowest) seen so far
+			// if (getWCSS() < bestWCSS) {
+			// 	//(re)assign relevant storage variables
+			// 	bestWCSS = getWCSS();
+			// 	bestCentroids = centroids;
+			// 	bestClusters = clusters;
+			// }
+		// }
 	}
 
 	/**
@@ -404,7 +404,8 @@ public class KMeansClusterer {
 		km.kMeansCluster();
 		km.writeClusterData(outfile);
 
-		System.out.println("BEST WCSS: " + km.bestWCSS);
+		//km.bestWCSS
+		System.out.println("BEST WCSS: " + km.getWCSS());
 	}
 
 }
