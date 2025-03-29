@@ -204,7 +204,7 @@ public class KMeansClusterer {
 		for (int i = 0; i < data.length; i++) {
 
 			double minDistance = Double.MAX_VALUE;
-			int closestCentroid = 0;
+			int closestCentroid = -1;
 
 			// Find the closest centroid for the current data point
 			for (int j = 0; j < centroids.length; j++) {
@@ -283,20 +283,20 @@ public class KMeansClusterer {
 
 		//randomly select k centroids in data set
 		for (int c = 0; c < k; c++)
-			centroids[c] = data[random.nextInt(data.length)]; //assign cluster in centroids to random data point
+			centroids[c] = data[random.nextInt(data.length)].clone(); //assign cluster in centroids to random data point
 
 		//loop iter times as determined by command line arguments
 		// for (int i = 0; i < iter; i++) {
 			assignNewClusters();
 			computeNewCentroids();
 
-			//check if current getWCSS is best (lowest) seen so far
-			// if (getWCSS() < bestWCSS) {
-			// 	//(re)assign relevant storage variables
-			// 	bestWCSS = getWCSS();
-			// 	bestCentroids = centroids;
-			// 	bestClusters = clusters;
-			// }
+		// 	//check if current getWCSS is best (lowest) seen so far
+		// 	if (getWCSS() < bestWCSS) {
+		// 		//(re)assign relevant storage variables
+		// 		bestWCSS = getWCSS();
+		// 		bestCentroids = centroids;
+		// 		bestClusters = clusters;
+		// 	}
 		// }
 	}
 
