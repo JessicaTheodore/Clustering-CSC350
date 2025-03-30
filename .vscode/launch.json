@@ -1,31 +1,40 @@
 {
     "configurations": [
+        
         {
             "type": "java",
             "name": "KMeansClusterer",
             "request": "launch",
             "mainClass": "KMeansClusterer",
-            "projectName": "Clustering-CSC350_8a55c3b6",
-            "args": ["-k", 8, "-iter", 10, "-in", "Project 3/hardgaussian8.dat", "-out", "Project 3/hardgaussian8-out.dat"]
-        },
-
-        {
-            "type": "java",
-            "name": "KMeansClusterer",
-            "request": "launch",
-            "mainClass": "KMeansClustererWithGap",
-            "projectName": "Clustering-CSC350_b54f1848",
+            "projectName": "Clustering-CSC350_b885b305",
             "args": [
-                "-kmin",
-                3,
-                "-kmax",
+                "-k",
                 8,
                 "-iter",
-                20,
+                10,
                 "-in",
                 "Project 3/hardgaussian8.dat",
                 "-out",
                 "Project 3/hardgaussian8-out.dat"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "KMeansClustererWithGap",
+            "request": "launch",
+            "mainClass": "KMeansClustererWithGap",
+            "projectName": "Clustering-CSC350_b885b305",
+            "args": [
+                "-kmin",
+                2,
+                "-kmax",
+                10,
+                "-iter",
+                10,
+                "-in",
+                "Project 3/stretched2.dat",
+                "-out",
+                "Project 3/stretched2-out.dat"
             ]
         }
     ]    

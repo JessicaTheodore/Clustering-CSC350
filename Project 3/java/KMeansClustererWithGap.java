@@ -436,6 +436,11 @@ public class KMeansClustererWithGap {
 	 * @param args command-line parameters specifying the type of k-Means Clustering
 	 */
 	public static void main(String[] args) {
+
+		for (String arg : args) {
+			System.out.println(arg);
+		}
+
 		int kMin = 2, kMax = 2, iter = 1;
 		ArrayList<String> attributes = new ArrayList<String>();
 		ArrayList<Integer> values = new ArrayList<Integer>();
