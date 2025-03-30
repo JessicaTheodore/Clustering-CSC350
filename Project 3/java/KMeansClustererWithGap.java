@@ -272,10 +272,6 @@ public class KMeansClustererWithGap {
 	public void kMeansCluster() {
         double GapK = Double.NEGATIVE_INFINITY;
         int bestK = kMin;
-        double bestKWCSS = Integer.MAX_VALUE;
-        double[][] bestKCentroids = new double [k][dim];
-        int[] bestKClusters = new int [data.length];
-
 
 		//iterate each k, if only one k given it will only use the k value
 		for(int k = kMin; k <= kMax; k++){
@@ -286,9 +282,9 @@ public class KMeansClustererWithGap {
 			centroids = new double [k][dim];
 
 			//initialize best WCSS helper variables
-			bestWCSS = Integer.MAX_VALUE;
-			bestCentroids = new double [k][dim];
-			bestClusters = new int [data.length];
+			double localBestWCSS = Integer.MAX_VALUE;
+			double[][] localBestCentroids = new double [k][dim];
+			int[] localBestClusters = new int [data.length];
 
 			//randomly select k centroids in data set
 			for (int c = 0; c < k; c++)
@@ -300,22 +296,27 @@ public class KMeansClustererWithGap {
 				computeNewCentroids();
 
 				//check if current getWCSS is best (lowest) seen so far
-				if (getWCSS() < bestWCSS) {
+				if (getWCSS() < localBestWCSS) {
 					//(re)assign relevant storage variables
-					bestWCSS = getWCSS();
-					bestCentroids = centroids;
-					bestClusters = clusters;
+					localBestWCSS = getWCSS();
+					localBestCentroids = centroids.clone();
+					localBestClusters = clusters.clone();
+
+                    //debug: System.out.println("local best" + localBestWCSS  + " for k " + k);
 				}
 			}
 
-            System.out.println("BEST WCSS: " + bestWCSS);
-
-
 			//iter's log of WCSS
-			double logMinWCSS = Math.log(bestWCSS);
-
-			//find min and max of each dimension
+			double logMinWCSS = Math.log(localBestWCSS);
+           // debug: System.out.println(localBestWCSS + " and " + logMinWCSS);
+			
+            //initialize bounds and set lower bound to be pos (so it can be changed)
 			double[][] bounds = new double[dim][2]; // each dimension, a min (0) and max (1) are stored
+            for(int init = 0; init < dim; init++){
+                bounds[init][0] = Integer.MAX_VALUE;
+            }
+
+            //find min and max of each dimension
 			for(int point = 0; point < data.length; point++){
 				for(int dimensions = 0; dimensions < dim; dimensions++){
 					//if a data point's coordinate in a dimension is less than the recorded minimum, it is replaced
@@ -339,7 +340,7 @@ public class KMeansClustererWithGap {
 				}
 			}
 
-			//evaluate best k and store WCSSs
+			//evaluate avg WCSS of all 100 sets 
 			double avgRandWCSS = 0; 
 			for(int avgDataSets = 0; avgDataSets < 100; avgDataSets++){
 				//initialize clusters array
@@ -350,13 +351,14 @@ public class KMeansClustererWithGap {
 
 				//randomly select k centroids in data set
 				for (int c = 0; c < k; c++)
-					centroids[c] = data[random.nextInt(data.length)].clone(); //assign cluster in centroids to random data point
+					centroids[c] = dataSets[avgDataSets][random.nextInt(data.length)].clone(); //assign cluster in centroids to random data point
 
 				//sort datapoints
 				assignNewClusters();
 				computeNewCentroids();
 
-				avgRandWCSS += getWCSS();
+				avgRandWCSS += Math.log(getWCSS());
+                // debug: System.out.println(getWCSS() + "of random");
 			}
             avgRandWCSS /= 100;
             // System.out.println(avgRandWCSS + "  avgRandWCSS");
@@ -364,23 +366,24 @@ public class KMeansClustererWithGap {
             // System.out.println(avgRandWCSS - logMinWCSS + "  difference");
 
             double tempGapK = avgRandWCSS - logMinWCSS;
+            System.out.println (tempGapK + " vs real " + GapK + " and logmin " + logMinWCSS + " for " + k);
 
 
             //replace gapK if a new max found
             if(GapK < tempGapK ){
-                System.out.println(GapK + "here");
+                System.out.println(tempGapK + "here");
                 bestK = k;
                 GapK = tempGapK;
-                bestKWCSS = bestWCSS;
-                bestKCentroids = bestCentroids.clone();
-                bestKClusters = bestClusters.clone();
+                bestWCSS = localBestWCSS;
+                bestCentroids = localBestCentroids.clone();
+                bestClusters = localBestClusters.clone();
             }
             
 
 		}
 
-        this.centroids = bestKCentroids.clone();
-        this.clusters = bestKClusters.clone();
+        // this.bestCentroids = bestKCentroids.clone();
+        // this.bestClusters = bestKClusters.clone();
 
         System.out.println("max GapK " + GapK + "  best k " + bestK);
 		
